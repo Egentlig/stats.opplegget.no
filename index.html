@@ -18,6 +18,7 @@
         Takk for meg,<br>
         Vennlig hilsen opplegget
     </p>
+
     <h3>Brukernavn endret</h3>
     <p>
         Her vises opp til 100 siste brukernavn som har blitt endret.
@@ -35,6 +36,25 @@
         </tbody>
     </table>
     <div id="usernameUpdatedErrorAlert" class="alert alert-danger d-none" role="alert">
+        <b>Feil: </b>Klarte ikke å hente data!
+    </div>
+
+    <h3>Brukere oppdaget</h3>
+    <p>
+        Her vises opp til 10 siste brukere har blitt oppdaget i en kanal.
+    </p>
+    <table id="userDiscoveredTable" class="table table-striped d-none">
+        <thead>
+        <tr>
+            <th scope="col">Navn</th>
+            <th scope="col">Tidspunkt</th>
+        </tr>
+        </thead>
+        <tbody id="userDiscoveredTableBody">
+
+        </tbody>
+    </table>
+    <div id="userDiscoveredErrorAlert" class="alert alert-danger d-none" role="alert">
         <b>Feil: </b>Klarte ikke å hente data!
     </div>
 </div>
@@ -68,6 +88,32 @@
         } catch (error) {
             console.error(error);
             usernameUpdatedErrorAlert.classList.remove("d-none");
+        }
+
+        const userDiscoveredTable = document.querySelector("#userDiscoveredTable");
+        const userDiscoveredTableBody = document.querySelector("#userDiscoveredTableBody");
+        const userDiscoveredErrorAlert = document.querySelector("#userDiscoveredErrorAlert");
+        try {
+            const response = await fetch("https://api.egentlig.tech/twitch/user/user-history/v0/user-discovered");
+            if (!response.ok) {
+                userDiscoveredErrorAlert.classList.remove("d-none");
+            }
+
+            const changes = await response.json();
+            changes.forEach(change => {
+                const tableRow = document.createElement("tr");
+                const name = document.createElement("td");
+                name.innerText = `${change.value.username} (${change.value.displayName})`;
+                const time = document.createElement("td");
+                time.innerText = new Date(change.time).toLocaleString();
+                tableRow.appendChild(name);
+                tableRow.appendChild(time);
+                userDiscoveredTableBody.appendChild(tableRow);
+            });
+            userDiscoveredTable.classList.remove("d-none");
+        } catch (error) {
+            console.error(error);
+            userDiscoveredErrorAlert.classList.remove("d-none");
         }
     });
 </script>
