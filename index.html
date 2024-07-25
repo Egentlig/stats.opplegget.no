@@ -19,7 +19,7 @@
         Vennlig hilsen opplegget
     </p>
     <h3>Brukernavn endret</h3>
-    <table id="table" class="table table-striped d-none">
+    <table id="usernameUpdatedTable" class="table table-striped d-none">
         <thead>
         <tr>
             <th scope="col">Gammelt navn</th>
@@ -27,24 +27,24 @@
             <th scope="col">Tidspunkt</th>
         </tr>
         </thead>
-        <tbody id="tableBody">
+        <tbody id="usernameUpdatedTableBody">
 
         </tbody>
     </table>
-    <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+    <div id="usernameUpdatedErrorAlert" class="alert alert-danger d-none" role="alert">
         <b>Feil: </b>Klarte ikke å hente data!
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script type="application/javascript">
     document.addEventListener("DOMContentLoaded", async () => {
-        const table = document.querySelector("#table");
-        const tableBody = document.querySelector("#tableBody");
-        const errorAlert = document.querySelector("#errorAlert");
+        const usernameUpdatedTable = document.querySelector("#usernameUpdatedTable");
+        const usernameUpdatedTableBody = document.querySelector("#usernameUpdatedTableBody");
+        const usernameUpdatedErrorAlert = document.querySelector("#usernameUpdatedErrorAlert");
         try {
             const response = await fetch("https://api.egentlig.tech/twitch/user/user-history/v0/username-updated");
             if (!response.ok) {
-                errorAlert.classList.remove("d-none");
+                usernameUpdatedErrorAlert.classList.remove("d-none");
             }
 
             const changes = await response.json();
@@ -59,12 +59,12 @@
                 tableRow.appendChild(oldName);
                 tableRow.appendChild(newName);
                 tableRow.appendChild(time);
-                tableBody.appendChild(tableRow);
+                usernameUpdatedTableBody.appendChild(tableRow);
             });
-            table.classList.remove("d-none");
+            usernameUpdatedTable.classList.remove("d-none");
         } catch (error) {
             console.error(error);
-            errorAlert.classList.remove("d-none");
+            usernameUpdatedErrorAlert.classList.remove("d-none");
         }
     });
 </script>
